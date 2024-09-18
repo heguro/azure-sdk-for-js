@@ -14,6 +14,7 @@ import { FeedRangeInternal } from "./FeedRange";
 import { DiagnosticNodeInternal } from "../../diagnostics/DiagnosticNodeInternal";
 import { EncryptionProcessor } from "../../encryption";
 import { ChangeFeedMode } from "./ChangeFeedMode";
+import { ChangeFeedIteratorResponse } from "./ChangeFeedIteratorResponse";
 
 /**
  * @hidden
@@ -137,7 +138,7 @@ export function isNullOrEmpty(text: string | null | undefined): boolean {
  * @hidden
  */
 export async function decryptChangeFeedResponse(
-  result: any,
+  result: ChangeFeedIteratorResponse<any>,
   diagnosticNode: DiagnosticNodeInternal,
   changeFeedMode: ChangeFeedMode,
   encryptionProcessor: EncryptionProcessor,
