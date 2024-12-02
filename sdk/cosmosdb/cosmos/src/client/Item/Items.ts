@@ -45,10 +45,7 @@ import {
   PartitionKey,
   PartitionKeyDefinition,
 } from "../../documents";
-import {
-  ChangeFeedPullModelIterator,
-  ChangeFeedIteratorOptions,
-} from "../../client/ChangeFeed";
+import { ChangeFeedPullModelIterator, ChangeFeedIteratorOptions } from "../../client/ChangeFeed";
 import { changeFeedIteratorBuilder } from "../../client/ChangeFeed";
 import { validateChangeFeedIteratorOptions } from "../../client/ChangeFeed/changeFeedUtils";
 import type { DiagnosticNodeInternal } from "../../diagnostics/DiagnosticNodeInternal";
