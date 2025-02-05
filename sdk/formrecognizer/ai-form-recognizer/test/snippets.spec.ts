@@ -1,7 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-import { AzureKeyCredential, DocumentAnalysisClient, DocumentModelAdministrationClient, DocumentSpan } from "../src/index.js";
+import {
+  AzureKeyCredential,
+  DocumentAnalysisClient,
+  DocumentModelAdministrationClient,
+  DocumentSpan,
+} from "../src/index.js";
 import { DefaultAzureCredential } from "@azure/identity";
 import { setLogLevel } from "@azure/logger";
 import { describe, it } from "vitest";
@@ -109,7 +114,7 @@ describe("snippets", () => {
         console.log(`status: ${status}`);
       },
     });
-  
+
     const {
       documents: [document],
     } = await poller.pollUntilDone();
