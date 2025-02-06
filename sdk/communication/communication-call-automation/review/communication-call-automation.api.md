@@ -98,12 +98,13 @@ export interface AnswerFailed extends Omit<RestAnswerFailed, "callConnectionId" 
 }
 
 // @public
-export interface AudioData {
+interface AudioData_2 {
     data: string;
     isSilent?: boolean;
     participant?: CommunicationIdentifier | undefined;
     timestamp?: Date;
 }
+export { AudioData_2 as AudioData }
 
 // @public
 export interface AudioMetadata {
@@ -320,6 +321,7 @@ export class CallRecording {
     downloadStreaming(sourceLocationUrl: string, options?: DownloadRecordingOptions): Promise<NodeJS.ReadableStream>;
     downloadToPath(sourceLocationUrl: string, destinationPath: string, options?: DownloadRecordingOptions): Promise<void>;
     downloadToStream(sourceLocationUrl: string, destinationStream: NodeJS.WritableStream, options?: DownloadRecordingOptions): Promise<void>;
+    getRecordingResult(recordingId: string, options?: GetRecordingResultOptions): Promise<RecordingResult>;
     getState(recordingId: string, options?: GetRecordingPropertiesOptions): Promise<RecordingStateResult>;
     pause(recordingId: string, options?: PauseRecordingOptions): Promise<void>;
     resume(recordingId: string, options?: ResumeRecordingOptions): Promise<void>;
@@ -599,6 +601,9 @@ export type GetParticipantOptions = OperationOptions;
 export type GetRecordingPropertiesOptions = OperationOptions;
 
 // @public
+export type GetRecordingResultOptions = OperationOptions;
+
+// @public
 export type HangUpOptions = OperationOptions;
 
 // Warning: (ae-forgotten-export) The symbol "RestHoldFailed" needs to be exported by the entry point index.d.ts
@@ -721,7 +726,7 @@ export interface MuteParticipantResult {
 // @public (undocumented)
 export class OutStreamingData {
     constructor(kind: MediaKind);
-    audioData?: AudioData;
+    audioData?: AudioData_2;
     static getStopAudioForOutbound(): string;
     static getStreamingDataForOutbound(data: string): string;
     kind: MediaKind;
@@ -903,6 +908,30 @@ export type RecordingFormat = "mp3" | "mp4" | "wav";
 
 // @public
 export type RecordingKind = "azureCommunicationServices" | "teams" | "teamsCompliance";
+
+// @public
+export interface RecordingResult {
+    // Warning: (ae-forgotten-export) The symbol "ErrorModel" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    readonly errors?: ErrorModel[];
+    // (undocumented)
+    readonly recordingDurationMs?: number;
+    // (undocumented)
+    readonly recordingExpirationTime?: Date;
+    // (undocumented)
+    recordingId: string;
+    // (undocumented)
+    readonly recordingStartTime?: Date;
+    // Warning: (ae-forgotten-export) The symbol "RecordingStorageInfo" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    readonly recordingStorageInfo?: RecordingStorageInfo;
+    // Warning: (ae-forgotten-export) The symbol "CallSessionEndReason" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    readonly sessionEndReason?: CallSessionEndReason;
+}
 
 // @public
 type RecordingState_2 = string;
@@ -1161,7 +1190,7 @@ export enum StreamingDataKind {
 }
 
 // @public (undocumented)
-export type StreamingDataResult = TranscriptionMetadata | TranscriptionData | AudioData | AudioMetadata;
+export type StreamingDataResult = TranscriptionMetadata | TranscriptionData | AudioData_2 | AudioMetadata;
 
 // @public
 export enum TextFormat {
