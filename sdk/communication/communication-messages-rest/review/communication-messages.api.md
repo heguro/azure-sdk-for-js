@@ -4,16 +4,22 @@
 
 ```ts
 
+import { ChatMessageReceivedEvent } from '@azure/communication-signaling';
+import { ChatThreadPropertiesUpdatedEvent } from '@azure/communication-signaling';
 import type { Client } from '@azure-rest/core-client';
 import type { ClientOptions } from '@azure-rest/core-client';
+import { CommunicationTokenCredential } from '@azure/communication-common';
 import type { ErrorModel } from '@azure-rest/core-client';
 import type { ErrorResponse } from '@azure-rest/core-client';
 import type { HttpResponse } from '@azure-rest/core-client';
 import type { KeyCredential } from '@azure/core-auth';
+import { ParticipantsAddedEvent } from '@azure/communication-signaling';
+import { ParticipantsRemovedEvent } from '@azure/communication-signaling';
 import type { PathUncheckedResponse } from '@azure-rest/core-client';
 import type { RawHttpHeaders } from '@azure/core-rest-pipeline';
 import type { RawHttpHeadersInput } from '@azure/core-rest-pipeline';
 import type { RequestParameters } from '@azure-rest/core-client';
+import { SignalingClientOptions } from '@azure/communication-signaling';
 import type { StreamableMethod } from '@azure-rest/core-client';
 import type { TokenCredential } from '@azure/core-auth';
 
@@ -166,6 +172,13 @@ export interface BotContactOutput extends ContactOutputParent {
     kind: "bot";
 }
 
+// @public (undocumented)
+export type ChatEventId = "chatMessageReceived" | "chatMessageEdited" | "chatMessageDeleted" | "typingIndicatorReceived" | "readReceiptReceived" | "chatThreadCreated" | "chatThreadDeleted" | "chatThreadPropertiesUpdated" | "participantsAdded" | "participantsRemoved" | "realTimeNotificationConnected" | "realTimeNotificationDisconnected";
+
+export { ChatMessageReceivedEvent }
+
+export { ChatThreadPropertiesUpdatedEvent }
+
 // @public
 export interface CommunicationContact extends ContactParent {
     kind: "communication";
@@ -239,6 +252,24 @@ export interface ConversationMessageItemOutput {
     senderCommunicationIdentifier: string;
     senderDisplayName?: string;
     sequenceId?: number;
+}
+
+// @public
+export class ConversationMessagesClient {
+    // Warning: (ae-forgotten-export) The symbol "InternalConversationMessagesClientOptions" needs to be exported by the entry point index.d.ts
+    constructor(endpoint: string, credential: CommunicationTokenCredential, options?: InternalConversationMessagesClientOptions);
+    off(event: "chatMessageReceived", listener: (e: ChatMessageReceivedEvent) => void): void;
+    off(event: "chatThreadPropertiesUpdated", listener: (e: ChatThreadPropertiesUpdatedEvent) => void): void;
+    off(event: "participantsAdded", listener: (e: ParticipantsAddedEvent) => void): void;
+    off(event: "participantsRemoved", listener: (e: ParticipantsRemovedEvent) => void): void;
+    on(event: "chatMessageReceived", listener: (e: ChatMessageReceivedEvent) => void): void;
+    on(event: "chatThreadPropertiesUpdated", listener: (e: ChatThreadPropertiesUpdatedEvent) => void): void;
+    on(event: "participantsAdded", listener: (e: ParticipantsAddedEvent) => void): void;
+    on(event: "participantsRemoved", listener: (e: ParticipantsRemovedEvent) => void): void;
+    on(event: "realTimeNotificationConnected", listener: () => void): void;
+    on(event: "realTimeNotificationDisconnected", listener: () => void): void;
+    startRealtimeNotifications(): Promise<void>;
+    stopRealtimeNotifications(): Promise<void>;
 }
 
 // @public
@@ -1040,6 +1071,10 @@ export interface ParticipantParent {
     // (undocumented)
     kind: ParticipantKind;
 }
+
+export { ParticipantsAddedEvent }
+
+export { ParticipantsRemovedEvent }
 
 // @public
 export interface ParticipantsResultOutput {
