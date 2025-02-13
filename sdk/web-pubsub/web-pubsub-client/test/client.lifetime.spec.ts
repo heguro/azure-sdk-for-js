@@ -11,22 +11,16 @@ import type {
   WebPubSubClientOptions,
   WebPubSubResult,
   WebPubSubRetryOptions,
-} from "../src/models/index.js";
-import { WebPubSubClient } from "../src/webPubSubClient.js";
-import { delay } from "@azure/core-util";
-import { TestWebSocketClient } from "./testWebSocketClient.js";
-import { WebPubSubJsonProtocol } from "../src/protocols/index.js";
+} from "../src/index.js";
+import { WebPubSubClient, WebPubSubJsonProtocol, SendMessageError } from "../src/index.js";
 import { getConnectedPayload } from "./utils.js";
-import { SendMessageError } from "../src/errors/index.js";
+import { delay } from "@azure/core-util";
 import { describe, it, assert, expect, vi } from "vitest";
-import type { MockInstance } from "vitest";
 
 describe("WebPubSubClient", function () {
   describe("Start operation can only be execute when stopped", () => {
     it("throw error when it's not stopped", async () => {
       const client = new WebPubSubClient("wss://service.com");
-      const testWs = new TestWebSocketClient(client);
-      makeStartable(testWs);
       await client.start();
       // dup start is forbidden
       await expect(client.start()).rejects.toThrowError();
@@ -454,18 +448,6 @@ describe("WebPubSubClient", function () {
       client.stop();
     });
   });
-
-  function makeStartable(ws: TestWebSocketClient): MockInstance<(fn: () => void) => void> {
-    const onOpen = ws.onopen.bind(ws);
-    const stub = vi.spyOn(ws, "onopen");
-    stub.mockImplementationOnce((...args) => {
-      setTimeout(() => {
-        onOpen(...args);
-        ws.invokeopen.call(ws);
-      });
-    });
-    return stub;
-  }
 
   async function spinCheck(fn: () => void, intervalInMs?: number, maxTry?: number): Promise<void> {
     if (!intervalInMs) {
