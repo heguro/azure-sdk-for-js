@@ -238,8 +238,22 @@ class NodeHttpClient implements HttpClient {
       const req = isInsecure ? http.request(options, resolve) : https.request(options, resolve);
 
       req.once("error", (err: Error & { code?: string }) => {
+        // Exclude large properties from request.agent to prevent excessive error output
+        const sanitizedRequest = request.agent
+          ? {
+              ...request,
+              agent: {
+                maxFreeSockets: request.agent.maxFreeSockets,
+                maxSockets: request.agent.maxSockets,
+              },
+            }
+          : request;
+
         reject(
-          new RestError(err.message, { code: err.code ?? RestError.REQUEST_SEND_ERROR, request }),
+          new RestError(err.message, {
+            code: err.code ?? RestError.REQUEST_SEND_ERROR,
+            request: sanitizedRequest,
+          }),
         );
       });
 
